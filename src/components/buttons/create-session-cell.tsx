@@ -16,7 +16,7 @@ export default function CreateSessionCell() {
             .insert([
                 {
                     status: 'waiting',
-                    creator_id: session?.data.session?.user.id!,
+                    creator_id: session?.data.session?.user.id ?? '',
                 },
             ]).select();
         router.push(`/${data![0]!.id}`);

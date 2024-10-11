@@ -2,8 +2,8 @@
 import { useAnonAuth } from "@/hooks/use-anon-auth";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Database } from "supabase/database.types";
+import { useCallback, useEffect, useState } from "react";
+import { type Database } from "supabase/database.types";
 import { createClient } from "utils/supabase/client";
 import { Button } from "../ui/button";
 
@@ -14,7 +14,7 @@ export default function ExistingSessionCell() {
     const router = useRouter();
     const { toast } = useToast();
 
-    const fetchSessions = async () => {
+    const fetchSessions = useCallback(async () => {
         if (!session) {
             return;
         }
@@ -34,14 +34,14 @@ export default function ExistingSessionCell() {
         } else {
             setSessions(data);
         }
-    };
+    }, [session, supabase, toast]);
 
     useEffect(() => {
-        fetchSessions();
-    }, [supabase, session?.user.id]);
+        void fetchSessions();
+    }, [supabase, session?.user.id, fetchSessions]);
 
     const userSessions = sessions.filter(
-        (game: any) => game.creator_id === session?.user.id || game.joiner_id === session?.user.id
+        (game: Database["public"]["Tables"]["games"]["Row"]) => game.creator_id === session?.user.id || game.joiner_id === session?.user.id
     );
 
     const handleGameClick = (gameId: string) => {
@@ -60,7 +60,7 @@ export default function ExistingSessionCell() {
                 variant: "destructive",
             });
         } else {
-            fetchSessions();
+            void fetchSessions();
             toast({
                 title: "Game deleted",
                 description: "The game has been deleted",
@@ -81,7 +81,7 @@ export default function ExistingSessionCell() {
                             <Button
                                 variant="ghost"
                                 className="absolute top-1    right-1 text-red-600"
-                                onClick={(e) => { e.stopPropagation(); handleDeleteGame(game.id) }}
+                                onClick={(e) => { e.stopPropagation(); void handleDeleteGame(game.id) }}
                             >
                                 X
                             </Button>
