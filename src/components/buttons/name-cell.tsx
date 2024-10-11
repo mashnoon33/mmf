@@ -34,7 +34,7 @@ export default function PlayerName() {
           variant: "destructive",
         });
       } else {
-        setPlayerName(data.name ?? '');
+        setPlayerName(data.name);
         setNewName(data.name ?? '');
       }
     };
@@ -87,7 +87,7 @@ export default function PlayerName() {
   return (
     <div onKeyDown={handleKeyDown} onClick={handleClick} className="flex cursor-pointer relative flex-col border-2 border-white text-center justify-center">      
         {
-            isEditing ? <input ref={inputRef} placeholder="handle" className="px-4 bg-transparent outline-none text-center focus:outline-none border-none caret-transparent" style={{ caretColor: 'white' }} value={newName} onChange={(e) => setNewName(e.target.value)} /> : playerName ?? <p>No name set</p>
+            isEditing ? <input ref={inputRef} placeholder="name" className="px-4 bg-transparent outline-none text-center focus:outline-none border-none caret-transparent" style={{ caretColor: 'white' }} value={newName} onChange={(e) => setNewName(e.target.value)} /> : playerName ?? <p className="text-yellow-400"> ⚠️ No name set</p>
         }
        <div className="absolute bottom-0 right-0 p-2 text-white/60 text-xs">
         {isEditing ? <span className="flex gap-2 items-center"><GrReturn className="font-bold" /> Press Enter to save</span> : <span> Click to edit name</span>}

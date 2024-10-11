@@ -1,12 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useAnonAuth } from "@/hooks/use-anon-auth";
-import { createClient } from "utils/supabase/client";
-import { Card } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
-import { Database } from "supabase/database.types";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast"
+import { Card } from "@/components/ui/card";
+import { useAnonAuth } from "@/hooks/use-anon-auth";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { type Database } from "supabase/database.types";
+import { createClient } from "utils/supabase/client";
 
 export default function ListActiveSessions() {
   const [sessions, setSessions] = useState<Database["public"]["Tables"]["games"]["Row"][]>([]);
@@ -15,7 +15,7 @@ export default function ListActiveSessions() {
   const router = useRouter();
   const { toast } = useToast();
 
-  const fetchSessions = async () => {
+  const fetchSessions = useCallback(async () => {
     if (!session) {
       return;
     }
@@ -34,7 +34,7 @@ export default function ListActiveSessions() {
     } else {
       setSessions(data);
     }
-  };
+  }, [session, supabase, toast]);
 
   useEffect(() => {
     void fetchSessions();
@@ -90,7 +90,7 @@ export default function ListActiveSessions() {
           ))}
         </div>
       ) : (
-        <p>No active sessions found for the current user.</p>
+        <p>No active sessions found</p>
       )}
     </div>
   );

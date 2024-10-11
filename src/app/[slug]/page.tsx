@@ -68,10 +68,9 @@ export default function Page({ params }: { params: { slug: string } }) {
         </div>
     }
 
-    return <>
-        <pre>{JSON.stringify(game, null, 2)}</pre>
+    return <div className="h-screen flex flex-col justify-center items-center">
         {game.creator_id === session?.user.id ? "waiting for second player" : <button onClick={handleJoinGame}>Join Game</button>}
-    </>
+    </div>
 }
 
 

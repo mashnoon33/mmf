@@ -2,14 +2,13 @@
 import React from 'react';
 import { columns, rows } from './consts';
 import { useGameBoard } from './handler';
-import { stat } from 'fs';
 
 type CellProps = {
   value: string;
   isActive: boolean;
 };
 
-const colorMap = {
+export const colorMap = {
   r: 'bg-red-500',
   b: 'bg-blue-500',
   g: 'bg-green-500 text-white',

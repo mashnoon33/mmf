@@ -89,7 +89,7 @@ export default function ExistingSessionCell() {
                     ))}
                 </div>
             ) : (
-                <p className="p-4">No active sessions found for the current user.</p>
+                <p className="p-4 text-white/40">No active sessions found </p>
             )}
         </div>
     );

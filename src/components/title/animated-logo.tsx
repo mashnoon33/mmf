@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { colorMap } from "../game-board";
 
 const generateRandomChar = () => {
   const characters = ['r', 'b', 'g', 'y', 'p', 'i'].join('')
@@ -52,7 +53,7 @@ const AnimatedLogo = () => {
   return (
     <div className="flex">
       {currentWord.map((char, index) => (
-        <div key={index} className="border border-white h-10 w-10 flex items-center justify-center text-white bg-red-500">
+        <div key={index} className={`border border-white h-10 w-10 flex items-center justify-center text-white ${colorMap[char as keyof typeof colorMap] || ''}`}>
           {char}
         </div>
       ))}
