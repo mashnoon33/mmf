@@ -29,7 +29,7 @@ export async function fetchGameState( gameId: string, playerId: string, isPlayer
 export function useGameBoardData(gameId: string, playerId: string, isPlayer: boolean) {
     const supabase = createClient();
     const [board, setBoard] = useState<string[][]>(Array.from({ length: 12 }, () => Array(4).fill("") as string[]));
-    const [cursor, setCursor] = useState({ row: 1, col: 0 });
+    const [cursor, setCursor] = useState({ row: 0, col: 0 });
     const [hasBoardLoaded, setHasBoardLoaded] = useState(false);
     const [hints, setHints] = useState<number[][]>([]);
     const [status, setStatus] = useState<Status>('playing');
