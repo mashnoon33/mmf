@@ -38,10 +38,10 @@ export type Database = {
       game_states: {
         Row: {
           active_row: number
-          board_state: string[][]
+          board_state: string[]
           created_at: string
           game_id: string
-          hints: number[][]
+          hints: number[]
           id: string
           player_id: string
           status: string
@@ -49,10 +49,10 @@ export type Database = {
         }
         Insert: {
           active_row?: number
-          board_state?: string[][]
+          board_state?: string[]
           created_at?: string
           game_id: string
-          hints?: number[][]
+          hints?: number[]
           id: string
           player_id: string
           status?: string
@@ -60,10 +60,10 @@ export type Database = {
         }
         Update: {
           active_row?: number
-          board_state?: string[][]
+          board_state?: string[]
           created_at?: string
           game_id?: string
-          hints?: number[][]
+          hints?: number[]
           id?: string
           player_id?: string
           status?: string
@@ -89,10 +89,10 @@ export type Database = {
       game_states_obfuscated: {
         Row: {
           active_row: number
-          board_state: string[][]
+          board_state: string[]
           created_at: string
           game_id: string
-          hints: number[][]
+          hints: number[]
           id: string
           player_id: string
           status: string
@@ -100,10 +100,10 @@ export type Database = {
         }
         Insert: {
           active_row?: number
-          board_state?: string[][]
+          board_state?: string[]
           created_at?: string
           game_id: string
-          hints?: number[][]
+          hints?: number[]
           id: string
           player_id: string
           status?: string
@@ -111,10 +111,10 @@ export type Database = {
         }
         Update: {
           active_row?: number
-          board_state?: string[][]
+          board_state?: string[]
           created_at?: string
           game_id?: string
-          hints?: number[][]
+          hints?: number[]
           id?: string
           player_id?: string
           status?: string
@@ -145,6 +145,8 @@ export type Database = {
           joiner_id: string | null
           started_at: string | null
           status: string
+          url: string
+          winner: string | null
         }
         Insert: {
           created_at?: string | null
@@ -153,6 +155,8 @@ export type Database = {
           joiner_id?: string | null
           started_at?: string | null
           status?: string
+          url: string
+          winner?: string | null
         }
         Update: {
           created_at?: string | null
@@ -161,6 +165,8 @@ export type Database = {
           joiner_id?: string | null
           started_at?: string | null
           status?: string
+          url?: string
+          winner?: string | null
         }
         Relationships: [
           {
@@ -177,42 +183,53 @@ export type Database = {
             referencedRelation: "players"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "games_winner_fkey"
+            columns: ["winner"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
         ]
       }
       players: {
         Row: {
           connected: boolean | null
           created_at: string
+          draw: number
           game_id: number | null
           id: string
           last_active: string | null
+          loss: number
           name: string | null
+          total: number
+          win: number
         }
         Insert: {
           connected?: boolean | null
           created_at?: string
+          draw?: number
           game_id?: number | null
           id: string
           last_active?: string | null
+          loss?: number
           name?: string | null
+          total?: number
+          win?: number
         }
         Update: {
           connected?: boolean | null
           created_at?: string
+          draw?: number
           game_id?: number | null
           id?: string
           last_active?: string | null
+          loss?: number
           name?: string | null
+          total?: number
+          win?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "players_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -306,7 +323,6 @@ export type TablesUpdate<
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
@@ -316,4 +332,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

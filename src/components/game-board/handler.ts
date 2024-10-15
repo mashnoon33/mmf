@@ -6,13 +6,14 @@ import { useAnonAuth } from '@/hooks/use-anon-auth';
 import { useCallback, useEffect } from 'react';
 import { colorMap, columns } from './consts';
 import { useGameBoardData } from './data-hooks';
+import { BoardState, HintState, Status } from '@/app/api/move/utilts';
 
 
 export function useGameBoard(gameId: string, playerId: string, isPlayer: boolean) {
     const { session } = useAnonAuth();
-    const { board, cursor, setBoard, setCursor, hasBoardLoaded, hints, setHints, status } = useGameBoardData(gameId, playerId, isPlayer);
+    const { board, cursor, setBoard, setCursor, hints, setHints, status, setStatus } = useGameBoardData(gameId, playerId, isPlayer);
     const handleSubmit = useCallback(async () => {
-        const response = await fetch('/api/move', {
+        const response = await fetch(`/api/move`, {
             method: 'POST',
             body: JSON.stringify({ board: board[cursor.row], game_id: gameId }),
         });
@@ -21,18 +22,20 @@ export function useGameBoard(gameId: string, playerId: string, isPlayer: boolean
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const data = await response.json();
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const { updatedBoardState, hints: newHints } = data;
+            const { updatedBoardState, hints: newHints, status } = data;
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             setBoard(updatedBoardState);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             setHints((prevHints) => [...prevHints, newHints]);
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            setStatus(status);
             setCursor((prevCursor) => ({
                 row: prevCursor.row + 1,
                 col: 0,
             }));
         }
-    }, [board, cursor.row, gameId, setBoard, setCursor, setHints]);
+    }, [board, cursor.row, gameId, setBoard, setCursor, setHints, setStatus]);
     
     const handleKeyPress = useCallback((event: KeyboardEvent) => {
         switch (event.key) {
@@ -42,6 +45,12 @@ export function useGameBoard(gameId: string, playerId: string, isPlayer: boolean
             case '4':
             case '5':
             case '6':
+            case 'r':
+            case 'b':
+            case 'g':
+            case 'y':
+            case 'p':
+            case 'i':
                 handleColorKeyPress(event.key, cursor, setBoard, setCursor);
                 break;
             case 'ArrowLeft':
@@ -88,9 +97,7 @@ const handleColorKeyPress = (key: string, cursor: { row: number, col: number }, 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         setBoard((prevBoard: string[][]) => {
             const newBoard = prevBoard[cursor.row] ?? [];
-            if (!newBoard[cursor.col]) {
-                newBoard[cursor.col] = color;
-            }
+            newBoard[cursor.col] = color; // Overwrite the color even if something is already there
             return [...prevBoard.slice(0, cursor.row), newBoard, ...prevBoard.slice(cursor.row + 1)];
         });
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call

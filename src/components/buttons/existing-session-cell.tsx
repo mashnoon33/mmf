@@ -44,8 +44,8 @@ export default function ExistingSessionCell() {
         (game: Database["public"]["Tables"]["games"]["Row"]) => game.creator_id === session?.user.id || game.joiner_id === session?.user.id
     );
 
-    const handleGameClick = (gameId: string) => {
-        router.push(`/${gameId}`);
+    const handleGameClick = (url: string) => {
+        router.push(`/${url}`);
     };
 
     const handleDeleteGame = async (gameId: string) => {
@@ -74,10 +74,11 @@ export default function ExistingSessionCell() {
             {userSessions.length > 0 ? (
                 <div className="flex w-full flex-col ">
                     {userSessions.map((game) => (
-                        <div key={game.id} className="p-4 w-full cursor-pointer hover:bg-gray-100 relative" onClick={() => handleGameClick(game.id)}>
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                        <div key={game.id} className="p-4 w-full cursor-pointer hover:bg-gray-100 relative" onClick={() => handleGameClick(game.url )}>
                             <h2 className="text-lg font-bold">Join Existing</h2>
+                            <p className="text-[#41FF00]">{game.status}</p>
                             <p className="text-sm ">{game.id.split('-')[0]}</p>
-                            <p className="text-[#e6ed17]">{game.status}</p>
                             <Button
                                 variant="ghost"
                                 className="absolute top-1    right-1 text-red-600"

@@ -18,6 +18,7 @@ export async function fetchGameState( gameId: string, playerId: string, isPlayer
     } else {
         if (data && data.board_state.length < 12) {
             const additionalRows = Array.from({ length: 12 - data.board_state.length }, () => Array(4).fill("") as string[]);
+            // @ts-expect-error this is a supabase bug
             data.board_state = [...data.board_state, ...additionalRows];
         }
       
@@ -36,9 +37,11 @@ export function useGameBoardData(gameId: string, playerId: string, isPlayer: boo
         const fetchData = async () => {
             const data = await fetchGameState(gameId, playerId, isPlayer);
             if (data) {
+                // @ts-expect-error this is a supabase bug
                 setBoard(data.board_state);
                 setCursor({ row: data.active_row, col: 0 });
                 setHasBoardLoaded(true);
+                // @ts-expect-error this is a supabase bug
                 setHints(data.hints);
                 setStatus(data.status as Status);
             }
@@ -64,6 +67,6 @@ export function useGameBoardData(gameId: string, playerId: string, isPlayer: boo
         }
     }, [gameId, supabase, playerId, isPlayer]);
 
-    return { board, cursor, setBoard, setCursor, hasBoardLoaded, hints, setHints, status };
+    return { board, cursor, setBoard, setCursor, hasBoardLoaded, hints, setHints, status, setStatus };
 }
 

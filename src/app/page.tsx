@@ -2,7 +2,6 @@
 import Title, { Subtitle } from "@/components/title/title";
 import { useAnonAuth } from "@/hooks/use-anon-auth";
 import { useEffect } from "react";
-import CreateSessionButton from "../components/buttons/create-session";
 import CreateSessionCell from "@/components/buttons/create-session-cell";
 import ExistingSessionCell from "@/components/buttons/existing-session-cell";
 import PlayerName from "@/components/buttons/name-cell";

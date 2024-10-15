@@ -1,4 +1,4 @@
-import { BoardState, HintState, Status } from "./utilts";
+import { type BoardState, type HintState, type Status } from "./utilts";
 import { adminClient } from 'utils/supabase/admin-client'
 
 
@@ -37,7 +37,9 @@ export async function fetchCurrentBoardState(game_id: string, player_id: string)
     const supabase = adminClient();
     console.log({boardState, hints});
     const { data, error } = await supabase.from('game_states').update({
+      // @ts-expect-error this is a supabase bug
       board_state: boardState,
+      // @ts-expect-error this is a supabase bug
       hints: hints,
       active_row: active_row + 1,
       status: status
@@ -58,10 +60,11 @@ export async function fetchCurrentBoardState(game_id: string, player_id: string)
   export async function upsertObfuscatedBoardState(game_id: string, player_id: string, boardState: BoardState, hints: HintState, status: Status) {
     const supabase = adminClient();
     const { data, error } = await supabase.from('game_states_obfuscated').upsert({
+      // @ts-expect-error this is a supabase bug
       board_state: boardState,
       game_id: game_id,
       player_id: player_id,
-      id: game_id + "_" + player_id,
+    id: game_id + "_" + player_id,
       hints: hints,
       status: status
     })

@@ -1,8 +1,7 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server';
 import { getSession } from 'utils/supabase/server';
 import { fetchCurrentBoardState, fetchSecretCode, updateBoardState, upsertObfuscatedBoardState } from './helpers';
 import { type BoardState, generateHints, type HintState, obfuscateBoardState, type Status } from './utilts';
-import { PostgrestError } from '@supabase/supabase-js';
 
 export async function POST(request: NextRequest) {
   try {
@@ -41,19 +40,19 @@ export async function POST(request: NextRequest) {
     const updatedHints = [...currentData.hints as unknown as HintState, hints] as HintState;
 
     // Update the board state in the database
-    const { data: updateResult, error: updateError } = await updateBoardState(game_id, session.id, updatedBoardState, updatedHints, currentData.active_row, status);
+    const {  error: updateError } = await updateBoardState(game_id, session.id, updatedBoardState, updatedHints, currentData.active_row, status);
     if (updateError) {
       return handleError('Error updating board state', 500, updateError);
     }
 
     // Update the obfuscated board state in the database
-    const { data: obfuscateResult, error: obfuscateError } = await upsertObfuscatedBoardState(game_id, session.id, obfuscatedBoardState, updatedHints, status);
+    const { error: obfuscateError } = await upsertObfuscatedBoardState(game_id, session.id, obfuscatedBoardState, updatedHints, status);
     if (obfuscateError) {
       return handleError('Error upserting obfuscated board state', 500, obfuscateError);
     }
 
     
-    return NextResponse.json({ updatedBoardState, hints });
+    return NextResponse.json({ updatedBoardState, hints, status });
   } catch (error) {
     return handleError('Unexpected error occurred', 500, error);
   }
