@@ -6,7 +6,7 @@ import type { Database } from "supabase/database.types";
 export function GameInProgress({ game }: { game: Database["public"]["Tables"]["games"]["Row"]; }) {
     const { session } = useAnonAuth();
     return (
-        <div className=" mb-10 grid grid-cols-2 mx-10 flex-col items-center justify-center border-2 border-white gap-4">
+        <div className=" grid grid-cols-2 mx-10 flex-col items-center justify-center border-2 border-white gap-4">
             <div className="flex flex-col items-center justify-center">
                 <GameBoard game={game} playerId={game.creator_id} isPlayer={game.creator_id === session?.user.id} />
             </div>
