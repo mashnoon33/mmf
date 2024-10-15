@@ -21,9 +21,6 @@ export function GameBoard({ game, playerId, isPlayer }: { game: Database["public
   const { session, board, cursor, hints, status } = useGameBoard(game.id, playerId, isPlayer);
   const [now, setNow] = useState(new Date());
   useEffect(() => {
-    if (game.status !== 'playing') {
-      return;
-    }
     const interval = setInterval(() => {
       setNow(new Date());
     }, 1000);
