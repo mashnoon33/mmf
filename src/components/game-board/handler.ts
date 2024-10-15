@@ -6,7 +6,6 @@ import { useAnonAuth } from '@/hooks/use-anon-auth';
 import { useCallback, useEffect } from 'react';
 import { colorMap, columns } from './consts';
 import { useGameBoardData } from './data-hooks';
-import { BoardState, HintState, Status } from '@/app/api/move/utilts';
 
 
 export function useGameBoard(gameId: string, playerId: string, isPlayer: boolean) {

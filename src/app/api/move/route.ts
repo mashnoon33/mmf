@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Update the obfuscated board state in the database
-    const { error: obfuscateError } = await upsertObfuscatedBoardState(game_id, session.id, obfuscatedBoardState, updatedHints, status);
+    const { error: obfuscateError } = await upsertObfuscatedBoardState(game_id, session.id, obfuscatedBoardState, updatedHints, status,  currentData.active_row,);
     if (obfuscateError) {
       return handleError('Error upserting obfuscated board state', 500, obfuscateError);
     }

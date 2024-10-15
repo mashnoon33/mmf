@@ -85,7 +85,7 @@ export default function PlayerName() {
   };
 
   return (
-    <div onKeyDown={handleKeyDown} onClick={handleClick} className="flex  cursor-pointer relative flex-col border-2 border-white text-center justify-center">      
+    <div onKeyDown={handleKeyDown} onClick={handleClick} className="flex max-[100px]  cursor-pointer relative flex-col border-2 border-white text-center justify-center">      
         {
             isEditing ? <input ref={inputRef} placeholder="name" className="px-4 bg-transparent outline-none text-center focus:outline-none border-none caret-transparent" style={{ caretColor: 'white' }} value={newName} onChange={(e) => setNewName(e.target.value)} /> : playerName ?? <p className="text-yellow-400"> ⚠️ No name set</p>
         }

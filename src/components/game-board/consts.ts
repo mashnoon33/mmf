@@ -1,4 +1,4 @@
-type cell_colors = "r" | "b" | "g" | "y" | "p" | "i" | "";
+export type cell_colors = "r" | "b" | "g" | "y" | "p" | "i" | "";
 
 export const colorMap: Record<string, cell_colors> = {
     1: "r", // red

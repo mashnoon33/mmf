@@ -1,5 +1,5 @@
 import { Status } from '@/app/api/move/utilts';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createClient } from 'utils/supabase/client';
 
 export async function fetchGameState( gameId: string, playerId: string, isPlayer: boolean) {
@@ -54,6 +54,7 @@ export function useGameBoardData(gameId: string, playerId: string, isPlayer: boo
             const subscription = supabase
                 .channel('real-time:game_states_obfuscated-' + gameId + '_' + playerId)
                 .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_states_obfuscated', filter: `id=eq.${gameId}_${playerId}` }, payload => {
+                    console.log(payload);
                     setBoard(payload.new.board_state as string[][]);
                     setCursor({ row: payload.new.active_row as number, col: 0 });
                     setHints(payload.new.hints as number[][]);

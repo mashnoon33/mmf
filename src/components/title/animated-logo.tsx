@@ -51,7 +51,9 @@ const AnimatedLogo = () => {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex cursor-pointer" onClick={() => {
+      window.location.href = '/';
+    }}>
       {currentWord.map((char, index) => (
         <div key={index} className={`border border-white h-10 w-10 flex items-center justify-center text-white ${colorMap[char as keyof typeof colorMap] || ''}`}>
           {char}
