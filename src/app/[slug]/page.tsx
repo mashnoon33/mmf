@@ -8,6 +8,7 @@ import { WaitingForPlayer } from "./waiting-for-player-view";
 import { GameInProgress } from "./gameplay-view";
 import { DeleteGame } from "./delete-game-cell";
 import { LinkCell } from "./link-cell";
+import { ColorKey } from "@/components/color-key";
 
 export default function Page({ params }: { params: { slug: string } }) {
     const [game, setGame] = useState<Database["public"]["Tables"]["games"]["Row"] | null>(null);
@@ -65,7 +66,9 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className="h-[calc(100vh-100px)]  grid  overflow-hidden" style={{ gridTemplateRows: "1fr auto" }}>
                 <GameInProgress game={game} />
                 <div className="grid   grid-cols-1 gap-4  mx-10 mb-10" style={{ gridTemplateColumns: "" }}>
-                    <div className="border-2 border-white h-[100px] w-full">test</div>
+                    <div className="border-2 border-white h-[100px] w-full">
+                        <ColorKey />
+                    </div>
                 </div>
             </div>
         );

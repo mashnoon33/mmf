@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { colorMap } from "../game-board";
+import { actual_color_map } from "../game-board";
 
 const generateRandomChar = () => {
   const characters = ['r', 'b', 'g', 'y', 'p', 'i'].join('')
@@ -55,7 +55,7 @@ const AnimatedLogo = () => {
       window.location.href = '/';
     }}>
       {currentWord.map((char, index) => (
-        <div key={index} className={`border border-white h-10 w-10 flex items-center justify-center text-white ${colorMap[char as keyof typeof colorMap] || ''}`}>
+        <div key={index} className={`border border-white h-10 w-10 flex items-center justify-center text-white ${actual_color_map[char as keyof typeof actual_color_map] || ''}`}>
           {char}
         </div>
       ))}

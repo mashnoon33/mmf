@@ -1,16 +1,22 @@
-import { colorMap } from "../game-board/consts";
+import { actual_color_map } from "../game-board";
+import { colorMap, numbermap } from "../game-board/consts";
 
 export function ColorKey() {
+    const groupedColors = Object.entries(colorMap).reduce((acc, [key, color]) => {
+        if (!acc[color]) {
+            acc[color] = [];
+        }
+        acc[color].push(key);
+        return acc;
+    }, {} as Record<string, string[]>);
+
     return <div>
-        <div className="flex flex-wrap justify-center mt-4">
-            {Object.entries(colorMap).map(([key, color]) => (
-                <div key={key} className="flex flex-col items-center m-2">
-                    <Keycap label={key} color={color} />
-                    <div
-                        className={`w-5 h-5 border-1 rounded-full`}
-                        style={{ backgroundColor: colorMap[color] }}
-                    >
-                    </div>
+        <div className="flex flex-row justify-center mt-4">
+            {Object.entries(groupedColors).map(([color, keys]) => (
+                <div key={color} className="flex flex-row items-center m-2">
+                    {keys.map(key => (
+                        <Keycap key={key} label={key} color={color} />
+                    ))}
                 </div>
             ))}
         </div>
@@ -27,14 +33,21 @@ const shiftKeycapMap: Record<string, string> = {
     "7": "&",
     "8": "*",
     "9": "(",
-    "0": ")"
+    "0": ")",
+    "r": "r",
+    "b": "b",
+    "g": "g",
+    "y": "y",
+    "p": "p",
+    "i": "i",
 };
 
 export function Keycap({ label, color }: { label: string, color: string }) {
     return (
-        <div className="inline-block m-1 p-2 border-2  rounded-md bg-gray-200 text-center w-12 h-12 font-bold relative">
-            <div className="absolute top-1 left-0 right-0 text-xs text-gray-400">{shiftKeycapMap[label]}</div>
-            <div className="absolute top-4 left-0 right-0  text-gray-500">{label}</div>
+        // @ts-expect-error this is a type error
+        <div className={`inline-block m-1 p-2 border-2  rounded-md border-white text-white text-center w-12 h-12 font-bold relative ${actual_color_map[color]}`}>
+            {/\d/.test(label) && <div className="absolute top-1 left-0 right-0 text-xs text-white/20">{shiftKeycapMap[label]}</div>}
+            <div className="absolute top-4 left-0 right-0  ">{label}</div>
         </div>
     );
 }

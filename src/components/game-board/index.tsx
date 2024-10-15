@@ -7,7 +7,7 @@ import { Cell } from './cell';
 import { Database } from 'supabase/database.types';
 import { format, formatDistance, formatDistanceToNow, intervalToDuration, parseJSON } from 'date-fns';
 
-export const colorMap = {
+export const actual_color_map = {
   r: 'bg-red-700',
   b: 'bg-blue-700',
   g: 'bg-green-700',
