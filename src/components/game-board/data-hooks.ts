@@ -56,6 +56,7 @@ export function useGameBoardData(gameId: string, playerId: string, isPlayer: boo
                 .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_states_obfuscated', filter: `id=eq.${gameId}_${playerId}` }, payload => {
                     console.log(payload);
                     setBoard(payload.new.board_state as string[][]);
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     setCursor({ row: payload.new.active_row ?? 0, col: 0 });
                     setHints(payload.new.hints as number[][]);
                     setStatus(payload.new.status as Status);
