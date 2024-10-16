@@ -3,6 +3,7 @@ import { useAnonAuth } from "@/hooks/use-anon-auth";
 import type { Database } from "supabase/database.types";
 import { PlayerBio } from "./player-bio";
 
+
 export function WaitingForPlayer({ game, handleJoinGame }: { game: Database["public"]["Tables"]["games"]["Row"]; handleJoinGame: () => void; }) {
     const { session } = useAnonAuth();
     return (

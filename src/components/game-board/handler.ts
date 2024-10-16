@@ -80,8 +80,13 @@ export function useGameBoard(gameId: string, playerId: string, isPlayer: boolean
         }
     }, [handleKeyPress, isPlayer]);
 
+    useEffect(() => {
+        console.log({cursor})
+    }, [cursor])
+
     return { session, board, cursor, setBoard, setCursor, hints, status };
 }
+
 
 
 

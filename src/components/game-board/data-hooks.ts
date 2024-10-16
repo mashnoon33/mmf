@@ -39,7 +39,7 @@ export function useGameBoardData(gameId: string, playerId: string, isPlayer: boo
             if (data) {
                 // @ts-expect-error this is a supabase bug
                 setBoard(data.board_state);
-                setCursor({ row: data.active_row, col: 0 });
+                setCursor({ row: data.active_row ?? 0, col: 0 });
                 setHasBoardLoaded(true);
                 // @ts-expect-error this is a supabase bug
                 setHints(data.hints);
@@ -56,7 +56,7 @@ export function useGameBoardData(gameId: string, playerId: string, isPlayer: boo
                 .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_states_obfuscated', filter: `id=eq.${gameId}_${playerId}` }, payload => {
                     console.log(payload);
                     setBoard(payload.new.board_state as string[][]);
-                    setCursor({ row: payload.new.active_row as number, col: 0 });
+                    setCursor({ row: payload.new.active_row ?? 0, col: 0 });
                     setHints(payload.new.hints as number[][]);
                     setStatus(payload.new.status as Status);
                 })

@@ -1,7 +1,7 @@
 "use client";
 import NameCell from "@/components/buttons/name-cell";
 import { useAnonAuth } from "@/hooks/use-anon-auth";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { type Database } from "supabase/database.types";
 import { createClient } from "utils/supabase/client";
 import { WaitingForPlayer } from "./waiting-for-player-view";
@@ -43,7 +43,8 @@ export default function Page({ params }: { params: { slug: string } }) {
         };
     }, [params.slug, supabase]);
 
-    const handleJoinGame = async () => {
+    const handleJoinGame = useCallback(async () => {
+        console.log("join game as", session?.user.id);
         const { data, error } = await supabase
             .from('games')
             .update({ joiner_id: session?.user.id })
@@ -55,7 +56,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         } else {
             setGame(data);
         }
-    };
+    }, [supabase, session?.user.id, params.slug]);
 
     if (!game) {
         return <div>Loading...</div>;
@@ -67,7 +68,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                 <GameInProgress game={game} />
                 <div className="grid   grid-cols-1 gap-4  mx-10 mb-10" style={{ gridTemplateColumns: "" }}>
                     <div className="border-2 border-white h-[100px] w-full">
-                        <ColorKey />
+                        {game.joiner_id === session?.user.id || game.creator_id === session?.user.id ? <ColorKey /> : <div className="h-[100px] w-full" >
+                            <span className="text-white/40">Spectating</span>
+                            <pre>{JSON.stringify({ joiner: game.joiner_id?.split('-')[0], creator: game.creator_id.split('-')[0], currentUser: session?.user.id.split('-')[0] }, null, 2)}</pre>
+                            </div>}
                     </div>
                 </div>
             </div>
