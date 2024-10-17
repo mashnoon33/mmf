@@ -27,8 +27,8 @@ export function PlayerBio({ playerId }: { playerId: string; }) {
     }, [playerId, supabase]);
     return (
         <div className="p-4   font-mono">
-            <h3 className="text-2xl font-bold"> {bio?.name}</h3>
-            <p> {bio?.id}</p>
+            <h3 className="text-2xl font-bold"> {bio?.name ?? "Untitled"}</h3>
+            <p> {bio?.id }</p>
             <p>
                 <span className="text-green-500">{bio?.win}W</span> | <span className="text-red-500">{bio?.loss}L</span>
             </p>

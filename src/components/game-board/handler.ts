@@ -1,19 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-function-type */
 
+import { useAnonAuth } from "@/hooks/use-anon-auth";
+import { useCallback, useEffect } from "react";
+import { colorMap, columns } from "./consts";
+import { useGameBoardData } from "./data-hooks";
 
-import { useAnonAuth } from '@/hooks/use-anon-auth';
-import { useCallback, useEffect } from 'react';
-import { colorMap, columns } from './consts';
-import { useGameBoardData } from './data-hooks';
-
-
-export function useGameBoard(gameId: string, playerId: string, isPlayer: boolean) {
+export function useGameBoard(
+    gameId: string,
+    playerId: string,
+    isPlayer: boolean,
+) {
     const { session } = useAnonAuth();
-    const { board, cursor, setBoard, setCursor, hints, setHints, status, setStatus } = useGameBoardData(gameId, playerId, isPlayer);
+    const {
+        board,
+        cursor,
+        setBoard,
+        setCursor,
+        hints,
+        setHints,
+        status,
+        setStatus,
+    } = useGameBoardData(gameId, playerId, isPlayer);
     const handleSubmit = useCallback(async () => {
+        if (!board[cursor.row]?.every((cell) => cell !== "")) {
+            return;
+        }
         const response = await fetch(`/api/move`, {
-            method: 'POST',
+            method: "POST",
             body: JSON.stringify({ board: board[cursor.row], game_id: gameId }),
         });
 
@@ -35,33 +49,33 @@ export function useGameBoard(gameId: string, playerId: string, isPlayer: boolean
             }));
         }
     }, [board, cursor.row, gameId, setBoard, setCursor, setHints, setStatus]);
-    
+
     const handleKeyPress = useCallback((event: KeyboardEvent) => {
         switch (event.key) {
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case 'r':
-            case 'b':
-            case 'g':
-            case 'y':
-            case 'p':
-            case 'i':
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "r":
+            case "b":
+            case "g":
+            case "y":
+            case "p":
+            case "i":
                 handleColorKeyPress(event.key, cursor, setBoard, setCursor);
                 break;
-            case 'ArrowLeft':
+            case "ArrowLeft":
                 handleArrowLeft(setCursor);
                 break;
-            case 'ArrowRight':
+            case "ArrowRight":
                 handleArrowRight(setCursor);
                 break;
-            case 'Backspace':
+            case "Backspace":
                 handleBackspace(cursor, setBoard, setCursor);
                 break;
-            case 'Enter':
+            case "Enter":
                 void handleSubmit();
                 break;
             default:
@@ -69,43 +83,45 @@ export function useGameBoard(gameId: string, playerId: string, isPlayer: boolean
         }
     }, [cursor, handleSubmit, setBoard, setCursor]);
 
-
-
     useEffect(() => {
         if (isPlayer) {
-            window.addEventListener('keydown', handleKeyPress);
+            window.addEventListener("keydown", handleKeyPress);
             return () => {
-                window.removeEventListener('keydown', handleKeyPress);
+                window.removeEventListener("keydown", handleKeyPress);
             };
         }
     }, [handleKeyPress, isPlayer]);
 
     useEffect(() => {
-        console.log({cursor})
-    }, [cursor])
+        console.log({ cursor });
+    }, [cursor]);
 
     return { session, board, cursor, setBoard, setCursor, hints, status };
 }
 
-
-
-
-
 // key handlers
 
-
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-const handleColorKeyPress = (key: string, cursor: { row: number, col: number }, setBoard: Function, setCursor: Function) => {
+const handleColorKeyPress = (
+    key: string,
+    cursor: { row: number; col: number },
+    setBoard: Function,
+    setCursor: Function,
+) => {
     const color = colorMap[key];
     if (color) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         setBoard((prevBoard: string[][]) => {
             const newBoard = prevBoard[cursor.row] ?? [];
             newBoard[cursor.col] = color; // Overwrite the color even if something is already there
-            return [...prevBoard.slice(0, cursor.row), newBoard, ...prevBoard.slice(cursor.row + 1)];
+            return [
+                ...prevBoard.slice(0, cursor.row),
+                newBoard,
+                ...prevBoard.slice(cursor.row + 1),
+            ];
         });
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        setCursor((prevCursor: { row: number, col: number }) => ({
+        setCursor((prevCursor: { row: number; col: number }) => ({
             row: prevCursor.row,
             col: Math.min(prevCursor.col + 1, columns.length - 1),
         }));
@@ -113,29 +129,32 @@ const handleColorKeyPress = (key: string, cursor: { row: number, col: number }, 
 };
 
 const handleArrowLeft = (setCursor: Function) => {
-    setCursor((prevCursor: { row: number, col: number }) => ({
+    setCursor((prevCursor: { row: number; col: number }) => ({
         row: prevCursor.row,
         col: Math.max(prevCursor.col - 1, 0),
     }));
 };
 
 const handleArrowRight = (setCursor: Function) => {
-    setCursor((prevCursor: { row: number, col: number }) => ({
+    setCursor((prevCursor: { row: number; col: number }) => ({
         row: prevCursor.row,
         col: Math.min(prevCursor.col + 1, columns.length - 1),
     }));
 };
 
-const handleBackspace = (cursor: { row: number, col: number }, setBoard: Function, setCursor: Function) => {
+const handleBackspace = (
+    cursor: { row: number; col: number },
+    setBoard: Function,
+    setCursor: Function,
+) => {
     setBoard((prevBoard: string[][]) => {
-        const newBoard = prevBoard.map(row => [...row]);
+        const newBoard = prevBoard.map((row) => [...row]);
         if (newBoard[cursor.row]) {
-
-            newBoard[cursor.row]![cursor.col] = '';
+            newBoard[cursor.row]![cursor.col] = "";
         }
         return newBoard;
     });
-    setCursor((prevCursor: { row: number, col: number }) => ({
+    setCursor((prevCursor: { row: number; col: number }) => ({
         row: prevCursor.row,
         col: Math.max(prevCursor.col - 1, 0),
     }));
