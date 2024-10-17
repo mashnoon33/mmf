@@ -33,13 +33,7 @@ const shiftKeycapMap: Record<string, string> = {
     "7": "&",
     "8": "*",
     "9": "(",
-    "0": ")",
-    "r": "r",
-    "b": "b",
-    "g": "g",
-    "y": "y",
-    "p": "p",
-    "i": "i",
+    "0": ")"
 };
 
 export function Keycap({ label, color }: { label: string, color: string }) {

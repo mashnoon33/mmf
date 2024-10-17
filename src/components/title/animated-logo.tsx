@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { actual_color_map } from "../game-board";
 
 const generateRandomChar = () => {
-  const characters = ['r', 'b', 'g', 'y', 'p', 'i'].join('')
+  const characters = ['1', '2', '3', '4', '5', '6'].join('')
   return characters.charAt(Math.floor(Math.random() * characters.length));
 };
 

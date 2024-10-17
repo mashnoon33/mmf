@@ -1,21 +1,21 @@
-export type cell_colors = "r" | "b" | "g" | "y" | "p" | "i" | "";
+export type cell_colors = "1" | "2" | "3" | "4" | "5" | "6" | "";
 
 export const numbermap: Record<string, cell_colors> = {
-    1: "r", // red
-    2: "b", // blue
-    3: "g", // green
-    4: "y", // yellow
-    5: "p", // purple
-    6: "i", // pink
+    1: "1", // red
+    2: "2", // blue
+    3: "3", // green
+    4: "4", // yellow
+    5: "5", // purple
+    6: "6", // pink
 };
 
 export const lettermpa: Record<string, cell_colors> = {
-    "r": "r",
-    "b": "b",
-    "g": "g",
-    "y": "y",
-    "p": "p",
-    "i": "i",
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "4": "4",
+    "5": "5",
+    "6": "6",
 };
 
 export const colorMap: Record<string, cell_colors> = {

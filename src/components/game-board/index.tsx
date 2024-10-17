@@ -8,12 +8,12 @@ import { Database } from 'supabase/database.types';
 import { format, formatDistance, formatDistanceToNow, intervalToDuration, parseJSON } from 'date-fns';
 
 export const actual_color_map = {
-  r: 'bg-red-700',
-  b: 'bg-blue-700',
-  g: 'bg-green-700',
-  y: 'bg-yellow-700',
-  p: 'bg-purple-700',
-  i: 'bg-indigo-700',
+    "1": 'bg-red-700',
+    "2": 'bg-blue-700',
+    "3": 'bg-green-700',
+    "4": 'bg-yellow-700',
+    "5": 'bg-purple-700',
+    "6": 'bg-indigo-700',
 };
 
 
