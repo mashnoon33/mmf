@@ -7,11 +7,6 @@ import ExistingSessionCell from "@/components/buttons/existing-session-cell";
 import PlayerName from "@/components/buttons/name-cell";
 
 export default function HomePage() {
-  const { session } = useAnonAuth();
-
-  useEffect(() => {
-    console.log("session", session);
-  }, [session]);
   return (
     <main className="grid h-[calc(100vh-100px)]  space-y-4 pb-10" style={{ gridTemplateRows: "1fr auto" }}>
       <WelcomeCell />

@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body className="bg-[#0a1b11] text-[#41FF00] h-screen crt" >

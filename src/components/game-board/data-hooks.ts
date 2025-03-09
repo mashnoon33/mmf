@@ -1,10 +1,10 @@
 import { Status } from '@/app/api/move/utilts';
+import { useAnonAuth } from '@/hooks/use-anon-auth';
 import { useEffect, useState } from 'react';
 import { createClient } from 'utils/supabase/client';
 
 export async function fetchGameState( gameId: string, playerId: string, isPlayer: boolean) {
     const supabase = createClient();
-
     const table = isPlayer ? 'game_states' : 'game_states_obfuscated';
     const { data, error } = await supabase
         .from(table)
@@ -28,12 +28,16 @@ export async function fetchGameState( gameId: string, playerId: string, isPlayer
 
 export function useGameBoardData(gameId: string, playerId: string, isPlayer: boolean) {
     const supabase = createClient();
+    const { session } = useAnonAuth();
     const [board, setBoard] = useState<string[][]>(Array.from({ length: 12 }, () => Array(4).fill("") as string[]));
     const [cursor, setCursor] = useState({ row: 0, col: 0 });
     const [hasBoardLoaded, setHasBoardLoaded] = useState(false);
     const [hints, setHints] = useState<number[][]>([]);
     const [status, setStatus] = useState<Status>('playing');
     useEffect(() => {
+        if (!session) {
+            return;
+        }
         const fetchData = async () => {
             const data = await fetchGameState(gameId, playerId, isPlayer);
             if (data) {
@@ -47,9 +51,12 @@ export function useGameBoardData(gameId: string, playerId: string, isPlayer: boo
             }
         };
         void fetchData();
-    }, [gameId, playerId, isPlayer]);
+    }, [gameId, playerId, isPlayer, session]);
 
     useEffect(() => {
+        if (!session) {
+            return;
+        }
         if (!isPlayer && gameId && playerId) {
             const subscription = supabase
                 .channel('real-time:game_states_obfuscated-' + gameId + '_' + playerId)

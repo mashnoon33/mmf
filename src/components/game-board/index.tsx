@@ -1,11 +1,11 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import { intervalToDuration, parseJSON } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { Database } from 'supabase/database.types';
+import { Cell } from './cell';
 import { columns, rows } from './consts';
 import { useGameBoard } from './handler';
 import { HintRow } from './hint';
-import { Cell } from './cell';
-import { Database } from 'supabase/database.types';
-import { format, formatDistance, formatDistanceToNow, intervalToDuration, parseJSON } from 'date-fns';
 
 export const actual_color_map = {
     "1": 'bg-red-700',
